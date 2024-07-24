@@ -5,3 +5,33 @@
 // відобразити у тезі #userCity
 // Запустити програму потрібно за допомогою Live Server
 // Перевірити правильність програми - команда node tests/task2.test.js
+
+
+
+const getUserButton = document.getElementById('getUserButton');
+const userNameInput = document.getElementById('userNameInput');
+const userCity = document.getElementById('userCity');
+
+getUserButton.addEventListener('click', function() {
+    const userName = userNameInput.value.trim();
+    if (userName === '') {
+        alert('Please enter a valid user name.');
+        return;
+    }
+
+    fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response => response.json())
+        .then(users => {
+            const foundUser = users.find(user => user.name === userName);
+            if (foundUser) {
+                userCity.textContent = foundUser.address.city;
+            } else {
+                userCity.textContent = 'User not found';
+            }
+        })
+        
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            userCity.textContent = 'Error fetching user data';
+        });
+});
